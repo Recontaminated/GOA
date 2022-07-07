@@ -1,16 +1,20 @@
 from random import randint 
 
+# For instructor to test, if set to True, number to guess will be printed
+instructorMode = False
+#
+
 # (personal prefrence I dislike magic numbers so I put them here )
 maxAttempts = 3
 minRandNumber = 1
 maxRandNumber = 10
 
-# loop until user enters a valid input
+
 def getAndValidateInput():
       while True:
         userNumberInput = input(f"Enter a number to guess: ") 
 
-        #guard clause to validate input because input() return type unknown
+        #guard clause to validate input because input() return content unknown
         if not userNumberInput.isdigit():
             print("\nFollow the correct input")
             continue
@@ -21,12 +25,15 @@ def getAndValidateInput():
 def GuessANumberGame():
 
     numberToGuess = randint(minRandNumber, maxRandNumber)
+    
+    if instructorMode:
+        print(f"The number to guess is: {numberToGuess}")
+
     for i in range(maxAttempts):
 
         # helper function for readability
         userNumber = getAndValidateInput()
 
-        # check if user's guess is correct
         if int(userNumber) == numberToGuess:
             print("Yes! You got it!")
             break
