@@ -32,11 +32,11 @@ public class FindLargest {
     }
 //(I am not proud of this implementation)
     private static void getHottestMonth() {
-        int largest = 0;
+        int largestTemp = 0;
         int LargestIndex = 0;
         for (int i = 0; i < temps.length; i++) {
-            if (temps[i] > largest) {
-                largest = temps[i];
+            if (temps[i] > largestTemp) {
+                largestTemp = temps[i];
                 LargestIndex = i;
             }
         }
