@@ -1,23 +1,29 @@
-/**
- * JFrame (graphics window) built, then adds a BoardFace to it.
+/**************************************************************************
+ *  Author: Jeremy Hsieh
+ *  Date: 7 uly, 2022
+ *  Course: GOA CS2: Java
  *
- * TASKS: 
- *    1. Inspect and understand the code within the paint method 
- *       (beginning on line  51).
- *    2. Using your knowledge of shapes, colors, and the coordinate plane,
- *       draw your own picture. 
- *       Remember the links to the documentation on the assignment page.
+ *  Procedurally generates a surbaban house with a city skyline.
  *
- * @author Leah Wolf - Adapted from Matt Memmo
- * @version Summer 2020
- */
+ *  These 14 lines of text are comments. They are not part of the code;
+ *  they are here as a note to the reader of the program.
+ *      The first 3 lines tell the reader who, when, and why
+ *      The next line describes the big picture purpose of the program.
+ *
+ *  We will always include such lines in our programs
+ *************************************************************************/
 
+import javax.swing.*;
 import java.awt.*;
-import java.util.*;
-import javax.swing.JPanel;
-import javax.swing.JFrame;
+import java.util.Random;
 
 public class DrawingFrame extends JFrame {
+    final Color skyBlue = new Color(77, 170, 221);
+    final Color baseGrass = new Color(117, 201, 32);
+    final Color brownHouseColor = new Color(20, 105, 100);
+    final Color darkerHouseColor = new Color(57, 43, 39);
+    final Color[] grays = {new Color(100, 100, 100), new Color(136, 136, 131), new Color(82, 82, 90), new Color(93, 93, 90), new Color(67, 63, 64), new Color(88, 98, 97), new Color(82, 82, 82)};
+    final Color[] grassGreens = {new Color(92, 139, 28),new Color(58, 87, 17),new Color(61, 108, 20), new Color(61, 120, 20), new Color(61, 90, 20), new Color(61, 108, 20), new Color(61, 108, 20)};
 
     //Create & set up the window (JFrame)
     public DrawingFrame(){
@@ -48,87 +54,90 @@ public class DrawingFrame extends JFrame {
         }
 
         public void paint(Graphics g){
-            final Color skyBlue = new Color(77, 170, 221);
-            final Color grass = new Color(117, 201, 32);
-            final Color brownHouseColor = new Color(110, 105, 100);
-            final Color darkerHouseColor = new Color(57, 43, 39);
+//            Here we initalize our constants for colors and configuration
+
             super.paint(g);
 //            Fill the screen w/ a white rect and setup background
             g.setColor(Color.white);
             g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
             g.setColor(skyBlue);
             g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT/2);
-            g.setColor(grass);
+            g.setColor(baseGrass);
             g.fillRect(0, BOARD_HEIGHT/2, BOARD_WIDTH, BOARD_HEIGHT/2);
+//            Dynamically generate the background buildings.
+            int numberOfBuildings = 25;
+            for (int i = 0; i < numberOfBuildings; i ++){
+//                Define where the buildings should go
+                int lowerBound = BOARD_HEIGHT/2;
+                int upperBound = BOARD_HEIGHT;
+//                generate random width and position for buildings
+                int randomWidth = new Random().nextInt(BOARD_WIDTH/8);
+                int randomX = new Random().nextInt(BOARD_WIDTH);
+                int randomHeight = -new Random().nextInt(upperBound - lowerBound) + lowerBound;
+                Color randomGray = grays[new Random().nextInt(grays.length)];
+                g.setColor(randomGray);
+
+                g.fillRect(randomX, lowerBound-randomHeight, randomWidth, randomHeight);
 
 
+
+            }
+
+//            texture baseGrass
+            for (int i = 0; i < 8000; i++){
+                paintSkylineBuilding(g);
+            }
 //            Draw the sun
             g.setColor(Color.yellow);
             g.fillOval(-25, -25, 125, 125);
-//            for loop to draw sun rays
-            g.setColor(brownHouseColor);
-            g.fillRect(BOARD_WIDTH-200, BOARD_HEIGHT-300, 150, 175);
-//           triangle
-            g.fillPolygon(new int[]{BOARD_WIDTH-200, BOARD_WIDTH-100, BOARD_WIDTH-200}, new int[]{BOARD_HEIGHT-300, BOARD_HEIGHT-300, BOARD_HEIGHT-200}, 3);
+            int topLeftOfHouseWidth = new Random().nextInt(BOARD_WIDTH);
+            int topLeftOfHouseHeight = new Random().nextInt(BOARD_HEIGHT-200)+200;
+            paintHouse(g, topLeftOfHouseWidth, topLeftOfHouseHeight);
 
 
-//          g.setColor(Color.black);
-//            //face
-//            g.setColor(Color.yellow); // yellow is a field of class Color
-//            g.fillOval(80,100, 350, 350);
-//
-//            //eyes
-//            g.setColor(Color.black);// ...so is black...
-//            g.fillOval(160,175, 50, 50);
-//            g.fillOval(290,175, 50, 50);
-//
-//            //mouth
-//            g.setColor(Color.red);// ...and red.
-//            g.fillOval(160,275, 175, 125);
-//            g.setColor(Color.yellow);   //Hide the top of the oval to make the mouth
-//            g.fillOval(160,260, 175, 125);
-//
-//            //nose
-//            Color orange = new Color(255,128,0);//variable orange
-//            g.setColor(orange);
-//            g.fillOval(240,280,20, 20);
-//
-//            //hair
-//            //brown becomes a new Color object...
-//            Color brown = new Color(101,0,0);
-//            //...& brown can now be used as parameter in method setColor
-//            g.setColor(brown);
-//
-//            int x = 60;  //x,y, and change in y (dy) - for use in hair loop below
-//            int y = 130;
-//            int dy = 30;
-//            for (int i = 0; i < 9; i++){
-//                g.fillOval(x,y, 75, 75);
-//                x += 40; //Move to the right for the next tuft of hair
-//
-//                //make the vertical arch of the hair tufts
-//                if (i < 4){
-//                    y -= dy;  //Y value goes ^ (remember (0, 0) is at top left)
-//                    dy -= 8;
-//                }
-//                else{
-//                    dy += 8;
-//                    y += dy;
-//                }
-//            }
-//
-//            //hat
-//            Color purple = new Color(102,0, 102); //variable purple
-//            g.setColor(purple);
-//            g.fillRect(75, 75, 375, 50);
-//            g.fillRect(150, 25, 225, 100);
-
-            //writing- keep smiling 
+            //write text
             //and to add text to the drawing...
+            g.setColor(Color.BLUE);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-            g.drawString("Keep Smiling", 20,  420);
+            g.drawString("Procedural Suburban Sunshine", 200,  20);
 
             g.dispose();
+        }
+        private void paintHouse(Graphics g, int topLeftOfHouseWidth, int topLeftOfHouseHeight){
+            //            Draw the house. Shadow has to come first so house goes on top
+            g.setColor(new Color(42, 73, 11));
+//            shadow of house
+            g.fillOval(topLeftOfHouseWidth-25, topLeftOfHouseHeight+150, 200, 50);
+//            draw house main body
+            g.setColor(brownHouseColor);
+            g.fillRect(topLeftOfHouseWidth, topLeftOfHouseHeight, 150, 175);
+//           make the roof of the house
+            g.setColor(darkerHouseColor);
+            g.fillPolygon(new int[]{topLeftOfHouseWidth-50, topLeftOfHouseWidth+75, topLeftOfHouseWidth+200}, new int[]{topLeftOfHouseHeight, topLeftOfHouseHeight-100, topLeftOfHouseHeight}, 3);
+//            coardnates relative to top left of house
+
+
+//          create windows
+            g.setColor(darkerHouseColor);
+            g.fillRoundRect(topLeftOfHouseWidth + 20, topLeftOfHouseHeight+20, 25, 25,5,5);
+            g.fillRoundRect(topLeftOfHouseWidth + 90, topLeftOfHouseHeight+20, 25, 25,5,5);
+            g.fillRoundRect(topLeftOfHouseWidth + 20, topLeftOfHouseHeight+ 60, 25, 25,5,5);
+            g.fillRoundRect(topLeftOfHouseWidth + 90, topLeftOfHouseHeight+60, 25, 25,5,5);
+
+//            door
+            g.setColor(darkerHouseColor);
+            g.fillRect(topLeftOfHouseWidth + 50, topLeftOfHouseHeight+125, 25, 50);
+            g.fillOval(topLeftOfHouseWidth + 50, topLeftOfHouseHeight+110, 25, 50);
+        }
+        private void paintSkylineBuilding(Graphics g) {
+            Color randomGreen = grassGreens[new Random().nextInt(grassGreens.length)];
+            g.setColor(randomGreen);
+            int randomX = new Random().nextInt(BOARD_WIDTH);
+            int randomY = new Random().nextInt(BOARD_HEIGHT/2)+BOARD_HEIGHT/2;
+//              texture a little bit by turning ovals into crescents
+            g.fillOval(randomX, randomY, 5, 5);
+            g.setColor(baseGrass);
+            g.fillOval(randomX+2, randomY, 5, 5);
         }
     }
 }
