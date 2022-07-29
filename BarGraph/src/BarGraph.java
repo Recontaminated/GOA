@@ -42,8 +42,8 @@ public class BarGraph extends JFrame{
 
     public static void main(String... argv) {
 //        USER CONFIGURABLE ///////////////////////////////////////////////////////////
-        double[] dc = {2.79, 3.21, 2.31, 6.30, 2.49, 3.51, 6.51, 8.73, 5.53, 4.86, 6.14, 4.96};
-        double[] seattle = {9.23, 3.63, 3.72, 2.71, 1.94, 1.57, .70, .88, 1.50, 3.48, 6.57, 5.35};
+        double[] dc = {2.79, 3.21, 2.31, 6.30, 2.49, 3.51, 6.51, 8.73, 5.53, 4.86, 6.14, 4.96,5};
+        double[] seattle = {9.23, 3.63, 3.72, 2.71, 1.94, 1.57, .70, .88, 1.50, 3.48, 6.57, 5.35,2};
         double[] la = {3.79, 1.21, 2.31, 2.30, 2.49, 1.51, 2.51, 8.73, 9.53, 7.86, 8.14, 9.96};
         double[][] all = {dc,seattle};
         String[] namesOfCities = {"Washington", "Seattle"};
@@ -56,12 +56,12 @@ public class BarGraph extends JFrame{
 //        END USER CONFIGURABLE ////////////////////////////////////////////////////////
 
 
-        for (int i = 0; i < all.length; i++) {
-            if (all[i].length != 12) {
-                System.out.println("Error: array length does not match 12");
-                System.exit(418 );
-            }
-        }
+//        for (int i = 0; i < all.length; i++) {
+//            if (all[i].length != 12) {
+//                System.out.println("Error: array length does not match 12");
+//                System.exit(418 );
+//            }
+//        }
         if (namesOfCities.length != all.length) {
             System.out.println("Error: number of city Names does not match number of cities");
             System.exit(418 );
@@ -185,7 +185,7 @@ public class BarGraph extends JFrame{
                 for(int innerIndex = 0; innerIndex < arr.length; innerIndex++){
                     int barHeight = scaled[outerIndex][innerIndex];
 //                    quick check that we have 12 buckets because number of months is 12.
-                    if (outerIndex == 0 && months.length == 12){
+                    if (outerIndex == 0 && months.length == 12 &&scaled[0].length == 12) {
 
                         g2.setColor(navy);
                         g2.setFont (new Font("Arial", Font.BOLD, 11));

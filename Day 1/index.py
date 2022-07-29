@@ -1,3 +1,4 @@
+# TESTED ON PYTHON 3.10
 from random import randint 
 
 # For instructor to test, if set to True, number to guess will be printed
@@ -39,7 +40,6 @@ def GuessANumberGame():
             break
         
         print("Nope, that's not it")
-
 
 # check if module is not being imported then run main game loop
 if __name__ == "__main__":
