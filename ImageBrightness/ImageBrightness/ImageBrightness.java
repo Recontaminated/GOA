@@ -3,7 +3,7 @@
  * by iterating through each pixel in the image, calculating its luminance, and using
  * the results to calculate the average luminance in the image.
  *
- * @author edited by Jeremy Hsieh
+ * @author edited by Jeremy 
  * @author original by Matt Memmo
  * @version 8/12/2022
  */
