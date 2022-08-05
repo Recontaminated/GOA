@@ -1,5 +1,5 @@
 /**
- * Colored box will take a STD in argument and will produce a box with colored subboxes.
+ * Colored box will take a STDIO argument and will produce a box with colored subboxes.
  *
  * Input is validated so that there are only 5 acceptable options
  *
@@ -7,7 +7,7 @@
  *(impossible to split a rectangle into 2 iso triangles)
  *
  *
- * @author Jeremy Hsieh
+ * @author Jeremy
  * @version 7.22.2022
  * Refrences:
  * https://www.w3schools.com/java/java_switch.asp for switch case expression

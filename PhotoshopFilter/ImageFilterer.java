@@ -6,7 +6,7 @@
  * mirror an image diagonally,
  * create an image from edges detected in the original.
  *
- * @author edited by Jeremy Hsieh
+ * @author edited by Jeremy
  * @author original by Matt Memmo
  * @version August 3rd 2022
  */

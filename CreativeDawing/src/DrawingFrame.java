@@ -1,5 +1,5 @@
 /**************************************************************************
- *  Author: Jeremy Hsieh
+ *  Author: Jeremy
  *  Date: 7 uly, 2022
  *  Course: GOA CS2: Java
  *
