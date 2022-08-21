@@ -92,19 +92,22 @@ public class GameWindow extends JFrame implements Runnable {
 //https://www.iitk.ac.in/esc101/05Aug/tutorial/2d/images/doublebuffering.html#:~:text=When%20a%20graphic%20is%20complex,is%20often%20used%20for%20animations.
     private void tickGame(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+//        setup the 2 paralax backgrounds
         bgLayer1.setX(cameraX);
         bgLayer1.draw(this, g2, cameraX);
         bgLayer2.setX(cameraX);
         bgLayer2.draw(this, g2, cameraX);
 
 
-
+//      helpful toggle to know if the player is on the ground every loop
         boolean isTouchingGround = player.isTouchingGround(this);
         if (isTouchingGround) {
             player.doubleJumpAvailable = true;
         }
+//        update score
         if (player.x -cameraX > score) score = -cameraX;
         //        write text and make nice backround for text
+//        draw text background + game stats
         g2.setColor(new Color(37,44,69));
         g2.fillRoundRect(20, 65, width-40, 60, 20, 20);
         g2.setColor(Color.white);
@@ -123,16 +126,17 @@ public class GameWindow extends JFrame implements Runnable {
 
         g2.setColor(Color.WHITE);
         g2.drawString("Distance: " + score + "m", 100, 100);
+//        if player is nearing end of chunk, make new chunk
         if (walls.get(walls.size() - 1).x < width + 100) {
             offsetWalls += width;
             System.out.println("running out of space making more walls");
             makeWalls(offsetWalls);
         }
 
-
+//      accelerate player downwards for gravity
         player.changeVelocity(0, gravity);
 
-
+//            accelerate player twards velocity = 0 for friction. Work in air aswell
             if (player.velocityX > 0) {
                 player.changeVelocity(-0.3, 0);
             }
@@ -142,7 +146,7 @@ public class GameWindow extends JFrame implements Runnable {
             else {
                 player.changeVelocity(0, 0);
             }
-
+//       check the keyhandeler for keyboard states and accelerate player accordingly
         if (keyHandler.isKeyPressed(KeyEvent.VK_D)) {
             player.changeVelocity(0.75, 0);
         }
@@ -153,7 +157,8 @@ public class GameWindow extends JFrame implements Runnable {
         if (keyHandler.isKeyPressed(KeyEvent.VK_SPACE)) {
 //          this will maek the player tocuh the ground instead of 1 px abouve because we are using rect.interrcets method
             player.hitBox.y ++;
-//            player.doubleJumpAvailable = true;
+//            shorthand for loop. IntelliJ is the best.
+//            Loop through each wall and check if the player's velosity tracks twards it. if so, stop the player from moving and move the player to the wall.
             for (Wall wall: walls){
 //                https://docs.oracle.com/javase/7/docs/api/java/awt/Rectangle.html thank god we can use rectangle intersection method to check for hitbox collision
                 boolean isTouchingFloor = wall.hitBox.intersects(player.hitBox);
@@ -179,12 +184,7 @@ public class GameWindow extends JFrame implements Runnable {
 
         }
 
-        if (player.velocityX > 7) {
-            player.setVelocity(7, player.velocityY);
-        }
-        else if (player.velocityX < -7) {
-            player.setVelocity(-7, player.velocityY);
-        }
+
 //        Horizontal colision
 
         player.hitBox.x += player.velocityX;
@@ -218,38 +218,51 @@ public class GameWindow extends JFrame implements Runnable {
                 player.y = player.hitBox.y;
             }
         }
-
+//        speed limit the player
+        if (player.velocityX > 7) {
+            player.setVelocity(7, player.velocityY);
+        }
+        else if (player.velocityX < -7) {
+            player.setVelocity(-7, player.velocityY);
+        }
+//      caluclate the player's new position using velosity and current cooardnates
         player.updatePlayerPos();
+//        if the player falls to low, kill them
         if (player.y > height + 300) {
             resetPlayer();
         }
+//        delete old walls behind the player so arraylist stays a reasonable size
         for (int i = 0; i < walls.size(); i++) {
             Wall wall = walls.get(i);
             if (wall.x < -width - 100) {
                 walls.remove(i);
             }
         }
-        //        draw stuff
+
+//        draw the walls
         for (Wall wall : walls) {
             wall.draw(g2);
         }
-        // update game logic
-
+//        draw the player
         player.drawPlayer(g2);
     }
-
+// run is a method that must be implemented because we extend Runnable class its the entrypoint to the game
     public void run() {
+
         int framesPast = 0;
         long previousTime = System.currentTimeMillis();
-
+//      begin the game loop
         while (true) {
+//            all of this is just for FPS logging
             long currentTime = System.currentTimeMillis();
+//            output FPS to console every 1s
             if (currentTime >= previousTime + 1000) {
                 System.out.println(framesPast + "fps");
                 framesPast = 0;
                 previousTime = System.currentTimeMillis();
             }
             try {
+//                caluclate time elapsed of a tick, then sleep until 1000/FPS or 16 ms. Otherwise dont sleep because we need to catch up
                 long startTime = System.currentTimeMillis();
                 tick();
                 long elapsedTime = System.currentTimeMillis() - startTime;
@@ -259,18 +272,23 @@ public class GameWindow extends JFrame implements Runnable {
                 if (timeToSleep > 0) {
                     Thread.sleep(timeToSleep);
                 }
+
                 else {
+                    //                we took longer than 1000/fps or 16 ms per tick so no sleep
                     System.out.println("Tick took too long");
                 }
 
                 framesPast++;
             }
+
             catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
         }
     }
-
+// extracter helper function for reability. it checks for the players position and if it gets near the edge of the screen,
+//    instead of moving the player forward it will move camera scroll forward
     private void scrollBuffer() {
         if (player.x > getWidth() - 200) {
             cameraX = getWidth() - player.x - 200 + cameraX;
@@ -278,6 +296,7 @@ public class GameWindow extends JFrame implements Runnable {
             player.hitBox.x = player.x;
 
         }
+//        check the other direction
         if (player.x < 200) {
             cameraX = -player.x + 200 + cameraX;
             player.x = 200;
@@ -285,13 +304,13 @@ public class GameWindow extends JFrame implements Runnable {
 
         }
     }
-
+// since dont actually have a camera, moveing the camera right is equavalent to moveing everything else left. So move walls left
     private void scrollWalls() {
         for (int i = 0; i < walls.size(); i++) {
             walls.get(i).updateXScroll(cameraX);
         }
     }
-
+//when the player dies or game starts set all values to starting positions or neutral.
     public void resetPlayer() {
         player.x = 500;
         player.y = 150;
@@ -301,6 +320,7 @@ public class GameWindow extends JFrame implements Runnable {
         offsetWalls = 0;
         score = 0;
         walls.clear();
+//        generate the spawn chunk
         for (int i = 0; i < 20; i++) {
             walls.add(new Wall(offsetWalls + i * 50, 600, 50, 50));
         }
@@ -320,6 +340,9 @@ public class GameWindow extends JFrame implements Runnable {
 
 
     }
+
+//    curtosy of user on stack overflow https://stackoverflow.com/questions/29067108/how-to-use-compatibleimage-to-make-drawing-images-faster-in-java2d
+//    allows for faster rendering of images for unoptimized systems
     public BufferedImage toCompatibleImage(BufferedImage image) {
         // obtain the current system graphical settings
         GraphicsConfiguration gfx_config = GraphicsEnvironment
