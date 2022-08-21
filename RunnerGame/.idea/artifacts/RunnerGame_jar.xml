@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="RunnerGame:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/RunnerGame_jar</output-path>
+    <root id="archive" name="RunnerGame.jar">
+      <element id="module-output" name="RunnerGame" />
+      <element id="directory" name="assets">
+        <element id="dir-copy" path="$PROJECT_DIR$/assets" />
+      </element>
+    </root>
+  </artifact>
+</component>
